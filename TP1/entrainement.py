@@ -1,7 +1,8 @@
 from sys import argv
 import re
+import numpy as np
 
-class Prediction:
+class Entrainement:
     def __init__(self, chemin, encodage = 'utf-8'):
         self.chemin = chemin
         self.encodage = encodage
@@ -31,15 +32,19 @@ class Prediction:
 
         print(d)
 
+        matrice = np.zeros((len(new_list), len(new_list)))
+
+        print(matrice)
+
 
 
 def main():
     chemin = argv[1]
     #enc = argv[2]
     #souschaine = argv[3]
-    prediction = Prediction(chemin)
-    text = prediction.lire()
-    prediction.retirer_mots(text)
+    entrainement = Entrainement(chemin)
+    text = entrainement.lire()
+    entrainement.retirer_mots(text)
 
 
 if __name__ == '__main__':
