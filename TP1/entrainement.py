@@ -7,6 +7,8 @@ class Entrainement:
         self.chemin = chemin
         self.encodage = encodage
         self.text = None
+        self.matrice = None
+        self.new_list = []
 
     def lire(self):
         f = open(self.chemin, 'r', encoding=self.encodage)
@@ -22,20 +24,25 @@ class Entrainement:
         mots = re.split(' |\n|\.|\?', texte)
         list = ' '.join(mots).split()
 
-        new_list = []
+
         index = 0
         for i in list:
-            if i not in new_list:
+            if i not in self.new_list:
                 d.update({i : index})
-                new_list.append(i)
+                self.new_list.append(i)
                 index += 1
 
         print(d)
 
-        matrice = np.zeros((len(new_list), len(new_list)))
+        self.matrice = np.zeros((len(self.new_list), len(self.new_list)))
 
-        print(matrice)
+        print(self.matrice)
 
+    def remplir_matrice(self):
+
+
+
+        pass
 
 
 def main():
