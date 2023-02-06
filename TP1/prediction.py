@@ -25,7 +25,7 @@ class Prediction:
 
         #sums = matrice.sum(axis=1)
 
-        ##pas sur
+
         for i, item in self.dictionnaire.items():
             if i == self.motsCherche:
                 #on met la valeur du mot que l'on cherhe a 0 puisqu'il ne nous interesse pas
@@ -38,23 +38,52 @@ class Prediction:
         sorted_d = sorted(self.dictionnaire.items(), key=lambda x: x[1], reverse=True)
         sorted_d
 
-        ##pour retourner seulement le nbr de sysnonyme demande
-        d = {}
-  #      for i in range(self.nbrSynonyme):
- #           d.update({self.nbrSynonyme[i] : self.nbrSynonyme[i]})
-
 
 
     def moindreCarre(self):
-        pass
+        matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
+
+
+        m = (matriceMot - self.matrice) **2
+        #m = np.linalg.norm(matriceMot - self.matrice) ** 2
+        sums = m.sum(axis=1)
+        sums
+
+
+        for i, item in self.dictionnaire.items():
+            if i == self.motsCherche:
+                #on met la valeur du mot que l'on cherhe a 0 puisqu'il ne nous interesse pas
+                self.dictionnaire[i] = 1000
+            else:
+                self.dictionnaire[i] = sums[item]
+
+        sorted_d = sorted(self.dictionnaire.items(), key=lambda x: x[1])
+        sorted_d
+
 
     def manhattan(self):
-        pass
+        matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
+
+        m = abs(matriceMot - self.matrice)
+        sums = m.sum(axis=1)
+        sums
+
+        for i, item in self.dictionnaire.items():
+            if i == self.motsCherche:
+                # on met la valeur du mot que l'on cherhe a 0 puisqu'il ne nous interesse pas
+                self.dictionnaire[i] = 1000
+            else:
+                self.dictionnaire[i] = sums[item]
+
+        sorted_d = sorted(self.dictionnaire.items(), key=lambda x: x[1])
+        sorted_d
+
 
 def main():
     matrice, dict = ent.main()
     prediction = Prediction(matrice, dict, "allo", 2)
-    prediction.produitScalaire()
+    #prediction.moindreCarre()
+    prediction.manhattan()
 
 
     pass
