@@ -17,11 +17,11 @@ class Entrainement:
         f = open(self.chemin, 'r', encoding=self.encodage)
         text = f.read()
         f.close()
-        self.text = text
+        self.text = re.findall('\w+', text)
         return text
 
     def compter_mots(self):
-        return len(re.findall('/w+', self.text))
+        return len(re.findall('\w+', self.text))
 
     ##chat GPT
     def remove_duplicates(self, words):
@@ -52,22 +52,13 @@ class Entrainement:
         print(self.matrice)
 
     def remplir_matrice(self):
-        sentences = []
-        #for i in self.new_list:
-            #faire une liste de phrase
-            #chatgp regarder la focntion strip()
-        sentences = re.split(' |\n|\.|\?', self.text)
-        list = ' '.join(sentences).split()
 
-        for i in range(len(list)):
-            ##pour ne pas prendre en compte les extremite du texte
-            if i >= ((self.fenetre - 1) / 2) and i < (len(list) - ((self.fenetre - 1) / 2)):
-
-                for j in range(int(((self.fenetre - 1) / 2))):
-                    if self.dictionnaire[list[i]] != self.dictionnaire[list[i + (j + 1)]]:
-                        self.matrice[self.dictionnaire[list[i]], self.dictionnaire[list[i + (j + 1)]]] += 1
-                    if self.dictionnaire[list[i]] != self.dictionnaire[list[i - (j + 1)]]:
-                        self.matrice[self.dictionnaire[list[i]], self.dictionnaire[list[i - (j + 1)]]] += 1
+        for i in range(len(self.text)):
+            for j in range(1,self.fenetre//2 + 1):
+                if(i+j < len(self.text)) and self.dictionnaire[self.text[i]] != self.dictionnaire[self.text[i + (j)]]:
+                    self.matrice[self.dictionnaire[self.text[i]], self.dictionnaire[self.text[i + (j)]]] += 1
+                if (i - j >= 0 ) and self.dictionnaire[self.text[i]] != self.dictionnaire[self.text[i - (j)]]:
+                    self.matrice[self.dictionnaire[self.text[i]], self.dictionnaire[self.text[i - (j)]]] += 1
 
         return self.matrice, self.dictionnaire
 
