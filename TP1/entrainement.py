@@ -23,6 +23,14 @@ class Entrainement:
     def compter_mots(self):
         return len(re.findall('/w+', self.text))
 
+    ##chat GPT
+    def remove_duplicates(self, words):
+        unique_words = []
+        for word in words:
+            if word not in unique_words:
+                unique_words.append(word)
+        return unique_words
+
     def retirer_mots(self, texte):
         d = {}
         mots = re.split(' |\n|\.|\?', texte)
@@ -51,58 +59,19 @@ class Entrainement:
         sentences = re.split(' |\n|\.|\?', self.text)
         list = ' '.join(sentences).split()
 
-
-        list
-        #sentences = [sentence.strip() for sentence in sentences if sentence.strip()]
-
         for i in range(len(list)):
-            i
-            if i > 0:
-                list[i - 1]
-                self.dictionnaire
-                self.dictionnaire[list[i - 1]]
-                if self.dictionnaire[list[i]] != self.dictionnaire[list[i - 1]]:
-                    self.matrice[self.dictionnaire[list[i]],self.dictionnaire[list[i - 1]]] += 1
-            if i > 1:
-                list[i - 2]
-                self.dictionnaire
-                self.dictionnaire[list[i - 2]]
-                if self.dictionnaire[list[i]] != self.dictionnaire[list[i - 2]]:
-                    self.matrice[self.dictionnaire[list[i]], self.dictionnaire[list[i - 2]]] += 1
-            if i > 2:
-                list[i - 3]
-                self.dictionnaire
-                self.dictionnaire[list[i - 3]]
-                if self.dictionnaire[list[i]] != self.dictionnaire[list[i - 3]]:
-                    self.matrice[self.dictionnaire[list[i]], self.dictionnaire[list[i - 3]]] += 1
-            if i < len(list) - 1:
-                list[i + 1]
-                self.dictionnaire[list[i + 1]]
-                if self.dictionnaire[list[i]] != self.dictionnaire[list[i + 1]]:
-                    self.matrice[self.dictionnaire[list[i]], self.dictionnaire[list[i + 1]]] += 1
-            if i < len(list) - 2:
-                list[i + 2]
-                self.dictionnaire[list[i + 2]]
-                if self.dictionnaire[list[i]] != self.dictionnaire[list[i + 2]]:
-                    self.matrice[self.dictionnaire[list[i]], self.dictionnaire[list[i + 2]]] += 1
-            if i < len(list) - 3:
-                list[i + 3]
-                self.dictionnaire[list[i + 3]]
-                if self.dictionnaire[list[i]] != self.dictionnaire[list[i + 3]]:
-                    self.matrice[self.dictionnaire[list[i]], self.dictionnaire[list[i + 3]]] += 1
+            ##pour ne pas prendre en compte les extremite du texte
+            if i >= ((self.fenetre - 1) / 2) and i < (len(list) - ((self.fenetre - 1) / 2)):
 
-
-            #for j in sentences:
-            #    phrase = j
-            #    list_mots_phrase = re.split(' ', phrase)
-        self.matrice
-
-
-        pass
+                for j in range(int(((self.fenetre - 1) / 2))):
+                    if self.dictionnaire[list[i]] != self.dictionnaire[list[i + (j + 1)]]:
+                        self.matrice[self.dictionnaire[list[i]], self.dictionnaire[list[i + (j + 1)]]] += 1
+                    if self.dictionnaire[list[i]] != self.dictionnaire[list[i - (j + 1)]]:
+                        self.matrice[self.dictionnaire[list[i]], self.dictionnaire[list[i - (j + 1)]]] += 1
 
 
 def main():
-    chemin = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test2.txt"
+    chemin = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
     # chemin = argv[1]
     #enc = argv[2]
     #souschaine = argv[3]
