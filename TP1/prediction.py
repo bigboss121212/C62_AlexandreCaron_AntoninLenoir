@@ -20,10 +20,7 @@ class Prediction:
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
 
         matrice = np.dot(self.matrice, matriceMot)
-        matrice
 
-
-        #sums = matrice.sum(axis=1)
 
 
         for i, item in self.dictionnaire.items():
@@ -38,6 +35,8 @@ class Prediction:
         sorted_d = sorted(self.dictionnaire.items(), key=lambda x: x[1], reverse=True)
         sorted_d
 
+
+        print(sorted_d)
 
 
     def moindreCarre(self):

@@ -12,13 +12,15 @@ class Entrainement:
         self.new_list = []
         self.file_path = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
         self.fenetre = 7
+        self.lire()
+        self.construireDictio(self.text)
 
     def lire(self):
         f = open(self.chemin, 'r', encoding=self.encodage)
         text = f.read()
         f.close()
         self.text = re.findall('\w+', text)
-        return text
+        #return text
 
     def compter_mots(self):
         return len(re.findall('\w+', self.text))
@@ -31,25 +33,21 @@ class Entrainement:
                 unique_words.append(word)
         return unique_words
 
-    def retirer_mots(self, texte):
+    def construireDictio(self, texte):
         d = {}
-        mots = re.split(' |\n|\.|\?', texte)
-        list = ' '.join(mots).split()
+        #mots = re.split(' |\n|\.|\?', texte)
+        #list = ' '.join(mots).split()
 
         index = 0
-        for i in list:
+        for i in texte:
             #pour enlever les doublons
             if i not in self.new_list:
                 d.update({i : index})
                 self.new_list.append(i)
                 index += 1
 
-        print(d)
         self.dictionnaire = d
-
         self.matrice = np.zeros((len(self.new_list), len(self.new_list)))
-
-        print(self.matrice)
 
     def remplir_matrice(self):
 
@@ -65,17 +63,10 @@ class Entrainement:
 
 def main():
     chemin = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
-    # chemin = argv[1]
-    #enc = argv[2]
-    #souschaine = argv[3]
     entrainement = Entrainement(chemin)
-    text = entrainement.lire()
-    entrainement.retirer_mots(text)
     matrice, dictio = entrainement.remplir_matrice()
 
     return matrice, dictio
-
-
 
 
 if __name__ == '__main__':
