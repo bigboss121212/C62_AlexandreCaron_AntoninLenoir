@@ -69,6 +69,8 @@ class Entrainement:
                     if self.dictionnaire[list[i]] != self.dictionnaire[list[i - (j + 1)]]:
                         self.matrice[self.dictionnaire[list[i]], self.dictionnaire[list[i - (j + 1)]]] += 1
 
+        return self.matrice, self.dictionnaire
+
 
 def main():
     chemin = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
@@ -78,7 +80,11 @@ def main():
     entrainement = Entrainement(chemin)
     text = entrainement.lire()
     entrainement.retirer_mots(text)
-    entrainement.remplir_matrice()
+    matrice, dictio = entrainement.remplir_matrice()
+
+    return matrice, dictio
+
+
 
 
 if __name__ == '__main__':
