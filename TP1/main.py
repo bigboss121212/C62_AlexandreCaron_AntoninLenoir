@@ -11,8 +11,8 @@ import prediction as pre
 
 
 def main():
-    enc = argv[1]
-    chemin = argv[2]
+    enc = argv[0]
+    chemin = argv[1]
     motListes = []
 
     entrainement = ent.Entrainement(chemin, enc)
@@ -29,11 +29,11 @@ def main():
                 motListes[0]
                 prediction = pre.Prediction(matrice, dictio, motListes[0][0], motListes[0][1])
                 if motListes[0][2] == "0":
-                    prediction.produitScalaire()
+                    prediction.produitScalaire(motListes[0][1])
                 if motListes[0][2] == "1":
-                    prediction.moindreCarre()
+                    prediction.moindreCarre(motListes[0][1])
                 if motListes[0][2] == "2":
-                    prediction.manhattan()
+                    prediction.manhattan(motListes[0][1])
 
     #question = input("Entrez un mot, le nombre de synonymes que vous voulez et la methode de calcul, i.e produit scalaire: 0, least-square: 1, city-block: 2 \n \n Tapper q pour quitter")
 

@@ -14,7 +14,15 @@ class Prediction:
         self.nbrSynonyme = nbrSynonyme
 
 
-    def produitScalaire(self):
+    def afficherPrediction(self, dict, nbreSynonymes):
+
+        index = 0
+        for j, items in dict:
+            if index < int(nbreSynonymes):
+                print(f'{j} -->  {items}')
+                index += 1
+
+    def produitScalaire(self, nbreSynonymes):
 
 
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
@@ -35,11 +43,12 @@ class Prediction:
         sorted_d = sorted(self.dictionnaire.items(), key=lambda x: x[1], reverse=True)
         sorted_d
 
+        self.afficherPrediction(sorted_d, nbreSynonymes)
 
-        print(sorted_d)
 
 
-    def moindreCarre(self):
+
+    def moindreCarre(self, nbreSynonymes):
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
 
 
@@ -59,8 +68,10 @@ class Prediction:
         sorted_d = sorted(self.dictionnaire.items(), key=lambda x: x[1])
         sorted_d
 
+        self.afficherPrediction(sorted_d, nbreSynonymes)
 
-    def manhattan(self):
+
+    def manhattan(self, nbreSynonymes):
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
 
         m = abs(matriceMot - self.matrice)
@@ -77,10 +88,12 @@ class Prediction:
         sorted_d = sorted(self.dictionnaire.items(), key=lambda x: x[1])
         sorted_d
 
+        self.afficherPrediction(sorted_d, nbreSynonymes)
+
 
 def main():
     matrice, dict = ent.main()
-    prediction = Prediction(matrice, dict, "allo", 2)
+    prediction = Prediction(matrice, dict, "belle", 2)
     #prediction.moindreCarre()
     prediction.manhattan()
 
