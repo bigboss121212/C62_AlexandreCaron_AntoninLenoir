@@ -35,8 +35,6 @@ class Entrainement:
 
     def construireDictio(self, texte):
         d = {}
-        #mots = re.split(' |\n|\.|\?', texte)
-        #list = ' '.join(mots).split()
 
         index = 0
         for i in texte:
@@ -60,14 +58,12 @@ class Entrainement:
 
         return self.matrice, self.dictionnaire
 
-
 def main():
     chemin = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
     entrainement = Entrainement(chemin)
     matrice, dictio = entrainement.remplir_matrice()
 
     return matrice, dictio
-
 
 if __name__ == '__main__':
     quit(main())
