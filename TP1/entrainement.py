@@ -3,7 +3,7 @@ import re
 import numpy as np
 
 class Entrainement:
-    def __init__(self, chemin, encodage = 'utf-8'):
+    def __init__(self, fenetre, chemin, encodage = 'utf-8'):
         self.chemin = chemin
         self.encodage = encodage
         self.text = None
@@ -11,7 +11,7 @@ class Entrainement:
         self.dictionnaire = None
         self.new_list = []
         self.file_path = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
-        self.fenetre = 7
+        self.fenetre = fenetre
         self.lire()
         self.construireDictio(self.text)
 

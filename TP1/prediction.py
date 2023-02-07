@@ -16,6 +16,7 @@ class Prediction:
             if index < int(nbreSynonymes):
                 print(f'{j} -->  {items}')
                 index += 1
+        print("\n")
 
     def produitScalaire(self, nbreSynonymes):
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
@@ -68,9 +69,6 @@ class Prediction:
                 dictionnairePrediction[i] = sums[item]
 
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
-
-        print("debug")
-        print(self.dictionnaire)
 
         self.afficherPrediction(sorted_d, nbreSynonymes)
 
