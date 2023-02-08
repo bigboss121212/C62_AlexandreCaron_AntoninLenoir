@@ -11,9 +11,17 @@ class Entrainement:
         self.dictionnaire = None
         self.new_list = []
         self.file_path = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
+        self.cheminStopWord = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\stopWords.txt"
         self.fenetre = fenetre
         self.lire()
         self.construireDictio(self.text)
+
+    def listStopWord(self):
+        f = open(self.cheminStopWord, 'r', encoding=self.encodage)
+        list = f.read()
+        f.close()
+        list = re.findall('\w+', list)
+        return list
 
     def lire(self):
         f = open(self.chemin, 'r', encoding=self.encodage)
@@ -59,11 +67,7 @@ class Entrainement:
         return self.matrice, self.dictionnaire
 
 def main():
-    chemin = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
-    entrainement = Entrainement(chemin)
-    matrice, dictio = entrainement.remplir_matrice()
-
-    return matrice, dictio
+    pass
 
 if __name__ == '__main__':
     quit(main())

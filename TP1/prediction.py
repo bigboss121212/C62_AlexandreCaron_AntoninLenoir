@@ -4,21 +4,24 @@ import numpy as np
 import entrainement as ent
 
 class Prediction:
-    def __init__(self, matrice, dictionnaire, mots, nbrSynonyme):
+    def __init__(self, matrice, dictionnaire, mots, nbrSynonyme, stopWords):
         self.matrice = matrice
         self.dictionnaire = dictionnaire
         self.motsCherche = mots
         self.nbrSynonyme = nbrSynonyme
+        self.stopWords = stopWords
 
-    def afficherPrediction(self, dict, nbreSynonymes):
-        index = 0
-        for j, items in dict:
-            if index < int(nbreSynonymes):
-                print(f'{j} -->  {items}')
-                index += 1
-        print("\n")
+    def afficherPrediction(self, dict, nbreSyno, stopWords):
+        filtered_dict = {}
+        for k, v in dict:
+            if k not in stopWords:
+                filtered_dict[k] = v
+        for i, (j, items) in enumerate(filtered_dict.items()):
+            if i >= int(nbreSyno):
+                break
+            print(f'{j} -->  {items}')
 
-    def produitScalaire(self, nbreSynonymes):
+    def produitScalaire(self):
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
 
         matrice = np.dot(self.matrice, matriceMot)
@@ -34,9 +37,9 @@ class Prediction:
         ##chat GPT
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1], reverse=True)
 
-        self.afficherPrediction(sorted_d, nbreSynonymes)
+        self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
 
-    def moindreCarre(self, nbreSynonymes):
+    def moindreCarre(self):
 
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
         m = (matriceMot - self.matrice) ** 2
@@ -52,10 +55,10 @@ class Prediction:
 
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
 
-        self.afficherPrediction(sorted_d, nbreSynonymes)
+        self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
 
 
-    def manhattan(self, nbreSynonymes):
+    def manhattan(self):
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
         m = abs(matriceMot - self.matrice)
         sums = m.sum(axis=1)
@@ -70,13 +73,10 @@ class Prediction:
 
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
 
-        self.afficherPrediction(sorted_d, nbreSynonymes)
+        self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
 
 def main():
-    matrice, dict = ent.main()
-    prediction = Prediction(matrice, dict, "belle", 2)
-    #prediction.moindreCarre()
-    prediction.manhattan()
+    pass
 
 
 

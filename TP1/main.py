@@ -14,6 +14,7 @@ def main():
 
     entrainement = ent.Entrainement(fenetre, chemin, enc)
     matrice, dictio = entrainement.remplir_matrice()
+    stopWords = entrainement.listStopWord()
 
     while True:
         mots = input("Entrez un mot, le nombre de synonymes que vous voulez et la methode de calcul, i.e produit scalaire: 0, least-square: 1, city-block: 2 \n\nTapper q pour quitter\n\n").split(' ')
@@ -22,13 +23,13 @@ def main():
             break
         else:
             if len(mots) == 3:
-                prediction = pre.Prediction(matrice, dictio, mots[0], mots[1])
+                prediction = pre.Prediction(matrice, dictio, mots[0], mots[1], stopWords)
                 if mots[2] == "0":
-                    prediction.produitScalaire(mots[1])
+                    prediction.produitScalaire()
                 if mots[2] == "1":
-                    prediction.moindreCarre(mots[1])
+                    prediction.moindreCarre()
                 if mots[2] == "2":
-                    prediction.manhattan(mots[1])
+                    prediction.manhattan()
 
 if __name__ == '__main__':
     quit(main())
