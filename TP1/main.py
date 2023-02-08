@@ -22,7 +22,7 @@ def main():
 
         if mots[0] == "q":
             break
-        else:
+        if mots[0] in dictio and mots[2] in ["0", "1", "2"]:
             if len(mots) == 3:
                 prediction = pre.Prediction(matrice, dictio, mots[0], mots[1], stopWords)
                 if mots[2] == "0":
