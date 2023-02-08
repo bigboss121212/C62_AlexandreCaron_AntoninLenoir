@@ -23,15 +23,12 @@ class Prediction:
 
     def produitScalaire(self):
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
-
         matrice = np.dot(self.matrice, matriceMot)
         dictionnairePrediction = {}
         dictionnairePrediction.update(self.dictionnaire)
+
         for i, item in self.dictionnaire.items():
-            if i == self.motsCherche:
-                #on met la valeur du mot que l'on cherhe a 0 puisqu'il ne nous interesse pas
-                dictionnairePrediction[i] = 0
-            else:
+            if i != self.motsCherche:
                 dictionnairePrediction[i] = matrice[item]
 
         ##chat GPT
@@ -47,10 +44,7 @@ class Prediction:
         dictionnairePrediction = {}
         dictionnairePrediction.update(self.dictionnaire)
         for i, item in self.dictionnaire.items():
-            if i == self.motsCherche:
-                #on met la valeur du mot que l'on cherhe a 0 puisqu'il ne nous interesse pas
-                dictionnairePrediction[i] = 1000
-            else:
+            if i != self.motsCherche:
                 dictionnairePrediction[i] = sums[item]
 
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
@@ -65,10 +59,7 @@ class Prediction:
         dictionnairePrediction = {}
         dictionnairePrediction.update(self.dictionnaire)
         for i, item in self.dictionnaire.items():
-            if i == self.motsCherche:
-                # on met la valeur du mot que l'on cherhe a 0 puisqu'il ne nous interesse pas
-                dictionnairePrediction[i] = 1000
-            else:
+            if i != self.motsCherche:
                 dictionnairePrediction[i] = sums[item]
 
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
