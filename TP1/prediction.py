@@ -20,10 +20,12 @@ class Prediction:
             if i >= int(nbreSyno):
                 break
             print(f'{j} -->  {items}')
+        print("")
 
     def produitScalaire(self):
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
         matrice = np.dot(self.matrice, matriceMot)
+
         dictionnairePrediction = {}
         dictionnairePrediction.update(self.dictionnaire)
 
@@ -32,6 +34,7 @@ class Prediction:
                 dictionnairePrediction[i] = matrice[item]
 
         ##chat GPT
+        dictionnairePrediction.pop(self.motsCherche)
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1], reverse=True)
 
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
@@ -39,31 +42,31 @@ class Prediction:
     def moindreCarre(self):
 
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
-        m = (matriceMot - self.matrice) ** 2
-        sums = m.sum(axis=1)
+        sums = np.sum(np.square(matriceMot - self.matrice), axis=1)
+
         dictionnairePrediction = {}
         dictionnairePrediction.update(self.dictionnaire)
         for i, item in self.dictionnaire.items():
             if i != self.motsCherche:
                 dictionnairePrediction[i] = sums[item]
 
+        dictionnairePrediction.pop(self.motsCherche)
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
-
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
 
 
     def manhattan(self):
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
-        m = abs(matriceMot - self.matrice)
-        sums = m.sum(axis=1)
+        sums = sum(abs(val1 - val2) for val1, val2 in zip(matriceMot, self.matrice))
+
         dictionnairePrediction = {}
         dictionnairePrediction.update(self.dictionnaire)
         for i, item in self.dictionnaire.items():
             if i != self.motsCherche:
                 dictionnairePrediction[i] = sums[item]
 
+        dictionnairePrediction.pop(self.motsCherche)
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
-
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
 
 def main():
