@@ -1,12 +1,13 @@
 from sys import argv
 import re
 import numpy as np
+from time import time
 
 class Entrainement:
     def __init__(self, fenetre, chemin, encodage = 'utf-8'):
         self.chemin = chemin
         self.encodage = encodage
-        self.text = None
+        self.text = tuple
         self.matrice = None
         self.dictionnaire = None
         self.new_list = []
@@ -37,6 +38,7 @@ class Entrainement:
 
 
     def remplir_matrice(self):
+        t = time()
 
         self.matrice = np.zeros((len(self.dictionnaire), len(self.dictionnaire)))
 
@@ -47,6 +49,7 @@ class Entrainement:
                 if i - j >= 0:
                     self.matrice[self.dictionnaire[self.text[i]], self.dictionnaire[self.text[i - j]]] += 1
 
+        print(f"temps Construire DICO :  {time() - t}")
         return self.matrice, self.dictionnaire
 
 

@@ -2,6 +2,7 @@ import re
 from collections import OrderedDict
 import numpy as np
 import entrainement as ent
+from time import time
 
 class Prediction:
     def __init__(self, matrice, dictionnaire, mots, nbrSynonyme, stopWords):
@@ -13,6 +14,7 @@ class Prediction:
 
     def afficherPrediction(self, dict, nbreSyno, stopWords):
         filtered_dict = {}
+
         for k, v in dict:
             if k not in stopWords:
                 filtered_dict[k] = v
@@ -22,7 +24,9 @@ class Prediction:
             print(f'{j} -->  {items}')
         print("")
 
+
     def produitScalaire(self):
+        t = time()
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
         matrice = np.dot(self.matrice, matriceMot)
 
@@ -38,9 +42,10 @@ class Prediction:
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1], reverse=True)
 
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
+        print(f"temps Construire produitScalaire :  {time() - t}")
 
     def moindreCarre(self):
-
+        t = time()
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
         sums = np.sum(np.square(matriceMot - self.matrice), axis=1)
 
@@ -53,9 +58,10 @@ class Prediction:
         dictionnairePrediction.pop(self.motsCherche)
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
-
+        print(f"temps Construire moindreCarre :  {time() - t}")
 
     def manhattan(self):
+        t = time()
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
         sums = sum(abs(val1 - val2) for val1, val2 in zip(matriceMot, self.matrice))
 
@@ -68,6 +74,8 @@ class Prediction:
         dictionnairePrediction.pop(self.motsCherche)
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
+        print(f"temps Construire manhattan :  {time() - t}")
+
 
 def main():
     pass
