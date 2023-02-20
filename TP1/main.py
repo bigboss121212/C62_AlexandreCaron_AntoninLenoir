@@ -3,10 +3,6 @@ import entrainement as ent
 import prediction as pre
 
 
-#class Main:
-   # def __init__(self):
-       # pass
-
 def main():
     fenetre = int(argv[1])
     enc = argv[2]
@@ -26,11 +22,11 @@ def main():
             if len(mots) == 3:
                 prediction = pre.Prediction(matrice, dictio, mots[0], mots[1], stopWords)
                 if mots[2] == "0":
-                    prediction.produitScalaire()
+                    prediction.produitGeneral(1)
                 if mots[2] == "1":
-                    prediction.moindreCarre()
+                    prediction.produitGeneral(2)
                 if mots[2] == "2":
-                    prediction.manhattan()
+                    prediction.produitGeneral(3)
 
 if __name__ == '__main__':
     quit(main())

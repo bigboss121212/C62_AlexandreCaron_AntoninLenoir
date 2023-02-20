@@ -1,7 +1,4 @@
-import re
-from collections import OrderedDict
 import numpy as np
-import entrainement as ent
 from time import time
 
 class Prediction:
@@ -25,10 +22,17 @@ class Prediction:
         print("")
 
 
-    def produitScalaire(self):
+    def produitGeneral(self, param):
         t = time()
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
-        matrice = np.dot(self.matrice, matriceMot)
+
+        if param == 1:
+            matrice = np.dot(self.matrice, matriceMot)
+        if param == 2:
+            matrice = np.sum(np.square(matriceMot - self.matrice), axis=1)
+        if param == 3:
+            matrice = sum(abs(val1 - val2) for val1, val2 in zip(matriceMot, self.matrice))
+
 
         dictionnairePrediction = {}
         dictionnairePrediction.update(self.dictionnaire)
@@ -43,39 +47,6 @@ class Prediction:
 
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
         print(f"temps Construire produitScalaire :  {time() - t}")
-
-    def moindreCarre(self):
-        t = time()
-        matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
-        sums = np.sum(np.square(matriceMot - self.matrice), axis=1)
-
-        dictionnairePrediction = {}
-        dictionnairePrediction.update(self.dictionnaire)
-        for i, item in self.dictionnaire.items():
-            if i != self.motsCherche:
-                dictionnairePrediction[i] = sums[item]
-
-        dictionnairePrediction.pop(self.motsCherche)
-        sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
-        self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
-        print(f"temps Construire moindreCarre :  {time() - t}")
-
-    def manhattan(self):
-        t = time()
-        matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
-        sums = sum(abs(val1 - val2) for val1, val2 in zip(matriceMot, self.matrice))
-
-        dictionnairePrediction = {}
-        dictionnairePrediction.update(self.dictionnaire)
-        for i, item in self.dictionnaire.items():
-            if i != self.motsCherche:
-                dictionnairePrediction[i] = sums[item]
-
-        dictionnairePrediction.pop(self.motsCherche)
-        sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1])
-        self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
-        print(f"temps Construire manhattan :  {time() - t}")
-
 
 def main():
     pass
