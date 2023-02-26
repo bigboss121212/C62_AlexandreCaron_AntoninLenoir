@@ -2,12 +2,13 @@ import numpy as np
 from time import time
 
 class Prediction:
-    def __init__(self, matrice, dictionnaire, mots, nbrSynonyme, stopWords):
+    def __init__(self, matrice, dictionnaire, mots, nbrSynonyme, stopWords, methode):
         self.matrice = matrice
         self.dictionnaire = dictionnaire
         self.motsCherche = mots
         self.nbrSynonyme = nbrSynonyme
         self.stopWords = stopWords
+        self.produitGeneral(int(methode))
 
     def afficherPrediction(self, dict, nbreSyno, stopWords):
         filtered_dict = {}
@@ -26,11 +27,11 @@ class Prediction:
         t = time()
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
 
-        if param == 1:
+        if param == 0:
             matrice = np.dot(self.matrice, matriceMot)
-        if param == 2:
+        if param == 1:
             matrice = np.sum(np.square(matriceMot - self.matrice), axis=1)
-        if param == 3:
+        if param == 2:
             matrice = sum(abs(val1 - val2) for val1, val2 in zip(matriceMot, self.matrice))
 
 
@@ -46,7 +47,7 @@ class Prediction:
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1], reverse=True)
 
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
-        print(f"temps Construire produitScalaire :  {time() - t}")
+        # print(f"temps Construire produitScalaire :  {time() - t}")
 
 def main():
     pass

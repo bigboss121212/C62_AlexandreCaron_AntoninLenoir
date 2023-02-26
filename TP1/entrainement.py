@@ -11,7 +11,7 @@ class Entrainement:
         self.matrice = None
         self.dictionnaire = None
         self.new_list = []
-        self.file_path = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
+        # self.file_path = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
         self.fenetre = fenetre
         self.lire(self.chemin)
         self.construireDictio(self.text)
@@ -49,7 +49,7 @@ class Entrainement:
                 if i - j >= 0:
                     self.matrice[self.dictionnaire[self.text[i]], self.dictionnaire[self.text[i - j]]] += 1
 
-        print(f"temps Construire DICO :  {time() - t}")
+        # print(f"temps Construire DICO :  {time() - t}")
         return self.matrice, self.dictionnaire
 
 
