@@ -24,7 +24,6 @@ class Prediction:
 
 
     def produitGeneral(self, param):
-        t = time()
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
 
         if param == 0:
@@ -47,7 +46,6 @@ class Prediction:
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1], reverse=True)
 
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
-        # print(f"temps Construire produitScalaire :  {time() - t}")
 
 def main():
     pass
