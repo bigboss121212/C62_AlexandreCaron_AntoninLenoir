@@ -1,5 +1,4 @@
 import numpy as np
-from time import time
 
 class Prediction:
     def __init__(self, matrice, dictionnaire, mots, nbrSynonyme, stopWords, methode):

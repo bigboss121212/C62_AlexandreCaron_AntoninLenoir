@@ -1,6 +1,5 @@
 import re
 import numpy as np
-from time import time
 
 class Entrainement:
     def __init__(self, fenetre, chemin, encodage = 'utf-8'):
