@@ -20,7 +20,7 @@ CREER_STOP_WORDS = '''
 CREATE TABLE IF NOT EXISTS tb_stop_words
 
     (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    id INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL,
     mots CHAR(255) UNIQUE NOT NULL
     )
 
@@ -35,6 +35,8 @@ CREATE TABLE IF NOT EXISTS tb_coocurrences
     id_mot2 INTEGER NOT NULL ,
     taille_fenetre INTEGER NOT NULL,
     frequence INTEGER NOT NULL,
+    
+    PRIMARY KEY (id_mot,id_mot2, taille_fenetre),
     CONSTRAINT FK_mot1 FOREIGN KEY (id_mot) REFERENCES tb_unique_words(id),
     CONSTRAINT FK_mot2 FOREIGN KEY (id_mot2) REFERENCES tb_unique_words(id)
     )
@@ -43,7 +45,7 @@ CREATE TABLE IF NOT EXISTS tb_coocurrences
 
 INSERT_MOTS_UNIQUE = "INSERT OR REPLACE INTO tb_unique_words VALUES(?,?)"
 INSERT_STOP_WORDS = "INSERT OR REPLACE INTO tb_stop_words(id,mots) VALUES(?,?)"
-INSERT_COOCURRENCES = "INSERT OR REPLACE INTO tb_coocurrences(id_mot, id_mot2, frequence, taille_fenetre) VALUES(?,?,?,?)"
+INSERT_COOCURRENCES = "INSERT OR REPLACE INTO tb_coocurrences(id_mot, id_mot2, taille_fenetre, frequence) VALUES(?,?,?,?)"
 
 
 

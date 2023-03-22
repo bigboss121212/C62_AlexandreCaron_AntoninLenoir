@@ -89,7 +89,7 @@ class EntrainementDB(Entrainement):
             if str(y[3]) == self.fenetre:
                 self.matrice[y[0] - 1][y[1] - 1] = y[2]
 
-        self.dao.delete_table_coocurrence()
+        #self.dao.delete_table_coocurrence()
 
         for i, mot in enumerate(self.text):
             for j in range(1, int(self.fenetre) // 2 + 1):
@@ -101,7 +101,7 @@ class EntrainementDB(Entrainement):
         matrice = np.argwhere(self.matrice > 0)
         for x, y in matrice:
             freq = int(self.matrice[x,y])
-            data.append((int(x), int(y), int(self.fenetre),freq))
+            data.append((int(x), int(y), int(self.fenetre), freq))
 
         self.dao.insert_coocurrences(data)
         return self.matrice, self.dictionnaire
