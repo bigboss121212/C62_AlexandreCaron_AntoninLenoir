@@ -23,32 +23,25 @@ def main():
     args = parser.parse_args()
     dao = d.Dao()
 
-    if args.e and args.t and args.enc and args.chemin:
-        # Appel de la fonction d'entrainement
-   
-        entrainementDB = ent.EntrainementDB(args.t, args.chemin, args.enc)
-        # Plus besoin de retourner une matrice
-        matrice, dictio = entrainementDB.remplir_matrice()
-        stopWords = entrainementDB.lire(cheminStopWord)
-        entrainementDB.insereStopWord(stopWords)
-        print("fin")
-
-    if args.r and args.t:
-        # Rectonstruire la matrice en fonction de la fenetre
-
+    if args.b:
+        # regenere la db
+        dao.delete_and_recreate()
+    if (args.e and args.t and args.enc and args.chemin) or (args.r and args.t):
+        # construire diction mot unique en fonction de la fenetre
         resultats = dao.fetch_mots_selon_taille_fenetre(args.t)
-
         dictio = {}
         for i, t in enumerate(resultats):
             dictio[t[0]] = i
 
+        #construire matrice de coocurence
         matrice = np.zeros((len(dictio), len(dictio)))
         list = dao.fetch_coocurrence()
-
         for y in list:
             ## mettre condition que la fenetre soit la mm que la notre
             if str(y[3]) == args.t:
                 matrice[y[0] - 1][y[1] - 1] = y[2]
+
+        print(matrice)
 
         # aller chercher les stopWord dans la db
         listTupleStopWords = dao.fetch_nom_stop_word()
@@ -56,23 +49,24 @@ def main():
         for mot in listTupleStopWords:
             stopWords.extend(mot)
 
-        # Appel pour la recherche
-        while True:
-            mots = input(
-                "Entrez un mot, le nombre de synonymes que vous voulez et la methode de calcul, i.e produit scalaire: 0, least-square: 1, city-block: 2 \n\nTapper q pour quitter\n\n").split(
-                ' ')
-            if mots[0] == "q":
-                break
-            if mots[0] in dictio and mots[2] in ["0", "1", "2"]:
-                if len(mots) == 3:
-                    #a changer aller chercher les stopword dans la db
-
-
-                    pre.Prediction(matrice, dictio, mots[0], mots[1], stopWords, mots[2])
-    if args.b:
-        # regenere la db
-        dao.delete_and_recreate()
-        pass
+        if args.e and args.t and args.enc and args.chemin:
+            # Appel de la fonction d'entrainement
+            entrainementDB = ent.EntrainementDB(args.t, args.chemin, args.enc)
+            # Plus besoin de retourner une matrice
+            entrainementDB.remplir_matrice()
+            stopWords = entrainementDB.lire(cheminStopWord)
+            entrainementDB.insereStopWord(stopWords)
+        if args.r and args.t:
+            # Appel pour la recherche
+            while True:
+                mots = input(
+                    "Entrez un mot, le nombre de synonymes que vous voulez et la methode de calcul, i.e produit scalaire: 0, least-square: 1, city-block: 2 \n\nTapper q pour quitter\n\n").split(
+                    ' ')
+                if mots[0] == "q":
+                    break
+                if mots[0] in dictio and mots[2] in ["0", "1", "2"]:
+                    if len(mots) == 3:
+                        pre.Prediction(matrice, dictio, mots[0], mots[1], stopWords, mots[2])
     else:
         ##parser.error("Argument manquant")
         print(parser.print_help())

@@ -10,7 +10,7 @@ class Entrainement:
         self.encodage = encodage
         self.text = tuple
         self.matrice = None
-        self.dictionnaire = None
+        self.dictionnaire = {}
         self.new_list = []
         # self.file_path = r"X:\Session6\Donnees, Megadonnees, Intelligence Artificielle\semaine2\test.txt"
         self.fenetre = fenetre
@@ -61,11 +61,10 @@ class EntrainementDB(Entrainement):
             index += 1
 
     def construireDictio(self, texte):
-        self.dictionnaire = {}
         data = []
         list = self.dao.fetch_all_unique_words()
-        index = 0
 
+        index = 0
         for mot in list:
             self.dictionnaire[mot[1]] = mot[0]
             index += 1
@@ -77,6 +76,7 @@ class EntrainementDB(Entrainement):
                 self.dictionnaire[mot] = len(self.dictionnaire)
                 data.append((len(self.dictionnaire) -1, mot))
 
+
         self.dao.inserer_datas(data)
 
     def remplir_matrice(self):
@@ -87,9 +87,7 @@ class EntrainementDB(Entrainement):
         for y in list:
             ## mettre condition que la fenetre soit la mm que la notre
             if str(y[3]) == self.fenetre:
-                self.matrice[y[0] - 1][y[1] - 1] = y[2]
-
-        #self.dao.delete_table_coocurrence()
+                self.matrice[y[0]][y[1]] = y[2]
 
         for i, mot in enumerate(self.text):
             for j in range(1, int(self.fenetre) // 2 + 1):
