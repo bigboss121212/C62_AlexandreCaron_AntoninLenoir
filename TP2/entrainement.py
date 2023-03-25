@@ -76,7 +76,6 @@ class EntrainementDB(Entrainement):
                 self.dictionnaire[mot] = len(self.dictionnaire)
                 data.append((len(self.dictionnaire) -1, mot))
 
-
         self.dao.inserer_datas(data)
 
     def remplir_matrice(self):
@@ -103,3 +102,21 @@ class EntrainementDB(Entrainement):
 
         self.dao.insert_coocurrences(data)
         return self.matrice, self.dictionnaire
+
+    # def fetchDictioMatrice(self):
+    #
+    #     resultats = self.dao.fetch_all_unique_words()
+    #     # dictio = {}
+    #     print(resultats)
+    #     for i, t in enumerate(resultats):
+    #         self.dictionnaire[t[1]] = i
+    #
+    #     #construire matrice de coocurence
+    #     self.matrice = np.zeros((len(self.dictionnaire), len(self.dictionnaire)))
+    #     list = self.dao.fetch_coocurrence()
+    #     for y in list:
+    #         ## mettre condition que la fenetre soit la mm que la notre
+    #         if str(y[3]) == self.fenetre:
+    #             self.matrice[y[0] - 1][y[1] - 1] = y[2]
+    #
+    #     return self.matrice, self.dictionnaire

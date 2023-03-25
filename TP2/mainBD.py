@@ -28,6 +28,7 @@ def main():
         dao.delete_and_recreate()
     if (args.e and args.t and args.enc and args.chemin) or (args.r and args.t):
         # construire diction mot unique en fonction de la fenetre
+
         resultats = dao.fetch_mots_selon_taille_fenetre(args.t)
         dictio = {}
         for i, t in enumerate(resultats):
@@ -41,8 +42,6 @@ def main():
             if str(y[3]) == args.t:
                 matrice[y[0] - 1][y[1] - 1] = y[2]
 
-        print(matrice)
-
         # aller chercher les stopWord dans la db
         listTupleStopWords = dao.fetch_nom_stop_word()
         stopWords = []
@@ -52,7 +51,6 @@ def main():
         if args.e and args.t and args.enc and args.chemin:
             # Appel de la fonction d'entrainement
             entrainementDB = ent.EntrainementDB(args.t, args.chemin, args.enc)
-            # Plus besoin de retourner une matrice
             entrainementDB.remplir_matrice()
             stopWords = entrainementDB.lire(cheminStopWord)
             entrainementDB.insereStopWord(stopWords)
