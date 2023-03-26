@@ -1,5 +1,4 @@
 import numpy as np
-from time import time
 
 class Prediction:
     def __init__(self, matrice, dictionnaire, mots, nbrSynonyme, stopWords, methode):
@@ -23,7 +22,6 @@ class Prediction:
         print("")
 
     def produitGeneral(self, param):
-        t = time()
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
 
         if param == 0:
@@ -45,7 +43,6 @@ class Prediction:
         sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1], reverse=param ==0)
 
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
-        # print(f"temps Construire produitScalaire :  {time() - t}")
 
 
 

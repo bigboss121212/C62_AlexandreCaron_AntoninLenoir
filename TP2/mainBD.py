@@ -2,9 +2,6 @@ import argparse
 import entrainement as ent
 import prediction as pre
 import DAO as d
-import numpy as np
-
-
 
 def main():
     cheminStopWord = "./stopWords.txt"
@@ -25,35 +22,20 @@ def main():
 
     if args.b:
         # regenere la db
+        # est-ce que l'on supprime les stopWord aussi
         dao.delete_and_recreate()
     if (args.e and args.t and args.enc and args.chemin) or (args.r and args.t):
-        # construire diction mot unique en fonction de la fenetre
 
-        resultats = dao.fetch_mots_selon_taille_fenetre(args.t)
-        dictio = {}
-        for i, t in enumerate(resultats):
-            dictio[t[0]] = i
-
-        #construire matrice de coocurence
-        matrice = np.zeros((len(dictio), len(dictio)))
-        list = dao.fetch_coocurrence()
-        for y in list:
-            ## mettre condition que la fenetre soit la mm que la notre
-            if str(y[3]) == args.t:
-                matrice[y[0] - 1][y[1] - 1] = y[2]
-
-        # aller chercher les stopWord dans la db
-        listTupleStopWords = dao.fetch_nom_stop_word()
-        stopWords = []
-        for mot in listTupleStopWords:
-            stopWords.extend(mot)
+        entrainementDB = ent.EntrainementDB(args.t)
+        matrice, dictio, stopWords = entrainementDB.fetchDictioMatriceStopWord()
 
         if args.e and args.t and args.enc and args.chemin:
             # Appel de la fonction d'entrainement
-            entrainementDB = ent.EntrainementDB(args.t, args.chemin, args.enc)
+            entrainementDB.encodage = args.enc
+            entrainementDB.lire(args.chemin)
+            entrainementDB.construireDictio()
             entrainementDB.remplir_matrice()
-            stopWords = entrainementDB.lire(cheminStopWord)
-            entrainementDB.insereStopWord(stopWords)
+            entrainementDB.insereStopWord(cheminStopWord)
         if args.r and args.t:
             # Appel pour la recherche
             while True:
@@ -68,8 +50,6 @@ def main():
     else:
         ##parser.error("Argument manquant")
         print(parser.print_help())
-
-
 
 # Press the green button in the gutter to run the script.
 
