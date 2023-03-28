@@ -50,12 +50,8 @@ class EntrainementDB(Entrainement):
 
     def remplir_matrice(self):
         data = []
-        # if len(self.matrice) == 0:
-        #     self.matrice = np.zeros((len(self.dictionnaire), len(self.dictionnaire)))
-        # on doit de nouveau fetch la matrice puisque le dictio est updater apres construire dictio()
-        self.fetchDictioMatriceStopWord()
-        print(self.dictionnaire)
-        print(self.matrice)
+
+        self.fetchMatrice()
 
         for i, mot in enumerate(self.text):
             for j in range(1, int(self.fenetre) // 2 + 1):
@@ -72,14 +68,7 @@ class EntrainementDB(Entrainement):
         self.dao.insert_coocurrences(data)
         return self.matrice, self.dictionnaire
 
-    def fetchDictioMatriceStopWord(self):
-        resultats = self.dao.fetch_all_unique_words()
-
-        # for i, t in enumerate(resultats):
-        #     self.dictionnaire[t[1]] = i
-
-        for mot in resultats:
-            self.dictionnaire[mot[1]] = mot[0]
+    def fetchMatrice(self):
 
         self.matrice = np.zeros((len(self.dictionnaire), len(self.dictionnaire)))
         list = self.dao.fetch_coocurrence()
@@ -88,9 +77,21 @@ class EntrainementDB(Entrainement):
             if str(y[3]) == self.fenetre:
                 self.matrice[y[0]][y[1]] = y[2]
 
+        return self.matrice
+
+    def fetchDictio(self):
+        resultats = self.dao.fetch_all_unique_words()
+
+        for mot in resultats:
+            self.dictionnaire[mot[1]] = mot[0]
+
+        return self.dictionnaire
+
+    def fetchStopWord(self):
         listTupleStopWords = self.dao.fetch_nom_stop_word()
+
         stopWords = []
         for mot in listTupleStopWords:
             stopWords.extend(mot)
 
-        return self.matrice, self.dictionnaire, stopWords
+        return stopWords
