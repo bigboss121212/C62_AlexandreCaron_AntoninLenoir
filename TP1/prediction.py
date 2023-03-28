@@ -21,7 +21,6 @@ class Prediction:
             print(f'{j} -->  {items}')
         print("")
 
-
     def produitGeneral(self, param):
         matriceMot = self.matrice[self.dictionnaire[self.motsCherche]]
 
@@ -42,14 +41,12 @@ class Prediction:
 
         ##chat GPT
         dictionnairePrediction.pop(self.motsCherche)
-        sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1], reverse=True)
+        sorted_d = sorted(dictionnairePrediction.items(), key=lambda x: x[1], reverse=param == 0)
 
         self.afficherPrediction(sorted_d, self.nbrSynonyme, self.stopWords)
 
 def main():
     pass
-
-
 
 if __name__ == '__main__':
     quit(main())

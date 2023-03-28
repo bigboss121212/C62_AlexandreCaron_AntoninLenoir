@@ -27,14 +27,12 @@ def main():
         stopWords = entrainementDB.fetchStopWord()
 
         if args.e and args.t and args.enc and args.chemin:
-            # Appel de la fonction d'entrainement
             entrainementDB.encodage = args.enc
             entrainementDB.lire(args.chemin)
             entrainementDB.construireDictio()
             entrainementDB.remplir_matrice()
             entrainementDB.insereStopWord(cheminStopWord)
         if args.r and args.t:
-            # Appel pour la recherche
             while True:
                 mots = input(
                     "Entrez un mot, le nombre de synonymes que vous voulez et la methode de calcul, i.e produit scalaire: 0, least-square: 1, city-block: 2 \n\nTapper q pour quitter\n\n").split(
