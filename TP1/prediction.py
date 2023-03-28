@@ -31,7 +31,6 @@ class Prediction:
         if param == 2:
             matrice = sum(abs(val1 - val2) for val1, val2 in zip(matriceMot, self.matrice))
 
-
         dictionnairePrediction = {}
         dictionnairePrediction.update(self.dictionnaire)
 
