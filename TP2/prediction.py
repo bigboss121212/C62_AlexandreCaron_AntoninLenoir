@@ -9,6 +9,7 @@ class Prediction:
         self.stopWords = stopWords
         self.produitGeneral(int(methode))
 
+
     def afficherPrediction(self, dict, nbreSyno, stopWords):
         filtered_dict = {}
 
