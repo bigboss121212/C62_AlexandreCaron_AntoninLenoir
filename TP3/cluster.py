@@ -63,7 +63,9 @@ class Cluster():
         for i in range(len(self.listCentroid)):
             indices = np.where(np.array(self.resultat) == i)[0]
             x_coords = matrice[indices, :]
-            self.listCentroid[i] = self.updateCentroid(x_coords)
+            self.listCentroid[i] = np.sum(x_coords, axis=0) / x_coords.shape[0]
+
+
 
         # print(self.listCentroid)
 
@@ -87,13 +89,8 @@ class Cluster():
 
 
 
-    def updateCentroid(self, matricePointAssocieCentroid):
-        return np.sum(matricePointAssocieCentroid, axis= 0)/ matricePointAssocieCentroid.shape[0]
-
-
-
-
-
+    # def updateCentroid(self, matricePointAssocieCentroid):
+    #     return np.sum(matricePointAssocieCentroid, axis= 0)/ matricePointAssocieCentroid.shape[0]
 
 def main():
 
