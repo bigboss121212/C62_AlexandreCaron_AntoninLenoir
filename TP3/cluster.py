@@ -59,8 +59,9 @@ class Cluster():
         # print(self.resultat)
         for i in range(len(self.listCentroid)):
             count_ones = self.resultat.count(i)
-            print("Il y a " + str(count_ones) + " mots appartenant au centroïde" + str(i))
+            print("Il y a " + str(count_ones) + " mots appartenant au centroïde " + str(i))
 
+        print("\n")
         return True
 
 
@@ -73,21 +74,21 @@ class Cluster():
             self.listCentroid[i] = np.sum(x_coords, axis=0) / x_coords.shape[0]
 
 
-def main():
-    matrix = np.random.randint(0, 100, size=(10000, 10000)).astype(float) / 1
-    cluster = Cluster(6)
-    cluster.randomCentroid(matrix, 2)
-    # print(cluster.listCentroid)
+# def main():
+#     matrix = np.random.randint(0, 100, size=(10000, 10000)).astype(float) / 1
+#     cluster = Cluster(6)
+#     cluster.randomCentroid(matrix, 2)
+#     # print(cluster.listCentroid)
+#
+#     go = True
+#     while go:
+#         go = cluster.associationAuCentroid(matrix)
+#         cluster.ReassigneCentroid(matrix)
 
-    go = True
-    while go:
-        go = cluster.associationAuCentroid(matrix)
-        cluster.ReassigneCentroid(matrix)
 
 
-
-if __name__ == '__main__':
-    quit(main())
+# if __name__ == '__main__':
+    # quit(main())
 
 
 

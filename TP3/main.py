@@ -30,8 +30,9 @@ def main() -> int:
                     # clust.matrice = cerveau.matrice
                     clust.randomCentroid(cerveau.matrice, options.k)
 
-                    while True:
-                        clust.associationAuCentroid(cerveau.matrice)
+                    go = True
+                    while go:
+                        go = clust.associationAuCentroid(cerveau.matrice)
                         clust.ReassigneCentroid(cerveau.matrice)
 
     except Exception as e:
