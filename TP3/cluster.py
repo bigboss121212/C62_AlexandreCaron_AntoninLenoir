@@ -1,15 +1,21 @@
 import numpy as np
+import time
+
+from numpy import float32
+
 
 class Cluster():
-    def __init__(self, taille: int, nbrMaxMot: int):
-        self.taille, self.nbrMaxMot = taille, nbrMaxMot
+    def __init__(self, nbrMaxMot: int):
+        self.nbrMaxMot = nbrMaxMot
         self.listCentroid = []
         self.matrice = None
         self.matriceResultat = None
         self.resultat = []
         self.tour = 0
+        self.start_time = 0
 
     def randomCentroid(self, matrice, kCentroid: int):
+        self.start_time = time.time()
 
         for i in range(kCentroid):
             random_y = np.random.randint(matrice.shape[0])
@@ -18,23 +24,7 @@ class Cluster():
 
     def associationAuCentroid(self, matrice):
         resultats = []
-        # resultats = np.zeros_like(matrice)
-        #
-        # # Parcourir chaque coordonnée de la matrice
-        # for i in range(matrice.shape[0]):
-        #     y_values = matrice[i, :]
-        #     # Calculer les distances entre les valeurs de y_values et les deux points
-        #     dist1 = np.linalg.norm(y_values - self.listCentroid[0], axis=0)
-        #     dist2 = np.linalg.norm(y_values - self.listCentroid[1], axis=0)
-        #     # Assigner chaque coordonnée au point le plus proche
-        #     resultats[i] = np.where(dist1 < dist2, 1, 2)
-        #
-        # # Afficher les résultats
-        # print(resultats)
-        # self.matriceResultat = resultats
 
-
-#version pour k centroid
         for i in range(matrice.shape[0]):
             y_values = matrice[i, :]
             # Initialiser la liste des distances pour chaque centroid
@@ -49,13 +39,30 @@ class Cluster():
             # Assigner chaque coordonnée au centroid le plus proche
             resultats.append(centroid_index)
 
+        #faire des set pour comparer notre resultat precendant
+        if(self.resultat != []):
+            combined_list = zip(self.resultat, resultats)
+
+            # Utiliser la fonction filter() pour filtrer les éléments différents
+            diff_list = list(filter(lambda x: x[0] != x[1], combined_list))
+            end_time = time.time()
+            duration = end_time - self.start_time
+            self.start_time = time.time()
+            print("Itération " + str(self.tour) + " effectuée en " + str(duration) + " secondes (" + str(len(diff_list)) + " changements)")
+            self.tour += 1
+
+
         if (self.resultat == resultats):
             print("stable")
             return False
         self.resultat = resultats
-        print(self.resultat)
-        print("**************" + str(self.tour) + "tour")
-        self.tour+=1
+        # print(self.resultat)
+        for i in range(len(self.listCentroid)):
+            count_ones = self.resultat.count(i)
+            print("Il y a " + str(count_ones) + " mots appartenant au centroïde" + str(i))
+
+        return True
+
 
 
 
@@ -66,51 +73,17 @@ class Cluster():
             self.listCentroid[i] = np.sum(x_coords, axis=0) / x_coords.shape[0]
 
 
-
-        # print(self.listCentroid)
-
-        #
-        # y_coordsCentroid1 = np.where(np.any(self.matriceResultat == 1, axis=1))[0]
-        # y_coordsCentroid2 = np.where(np.any(self.matriceResultat == 2, axis=1))[0]
-        #
-        # x_coords = []
-        # for y in y_coordsCentroid1:
-        #     x_coords.append(matrice[y, :])
-        # x_coordsCentroid1 = np.array(x_coords)
-        #
-        # self.listCentroid[0] = self.updateCentroid(x_coordsCentroid1)
-        #
-        # x_coords = []
-        # for y in y_coordsCentroid2:
-        #     x_coords.append(matrice[y, :])
-        # x_coordsCentroid2 = np.array(x_coords)
-        #
-        # self.listCentroid[1] = self.updateCentroid(x_coordsCentroid2)
-
-
-
-    # def updateCentroid(self, matricePointAssocieCentroid):
-    #     return np.sum(matricePointAssocieCentroid, axis= 0)/ matricePointAssocieCentroid.shape[0]
-
 def main():
-
     matrix = np.random.randint(0, 100, size=(10000, 10000)).astype(float) / 1
-
-    cluster = Cluster(5, 6)
-    cluster.randomCentroid(matrix, 10)
-
+    cluster = Cluster(6)
+    cluster.randomCentroid(matrix, 2)
     # print(cluster.listCentroid)
 
-
-    while True:
-
-        cluster.associationAuCentroid(matrix)
-
+    go = True
+    while go:
+        go = cluster.associationAuCentroid(matrix)
         cluster.ReassigneCentroid(matrix)
 
-    # cluster.associationAuCentroid(matrix)
-    #
-    # cluster.ReassigneCentroid(matrix)
 
 
 if __name__ == '__main__':

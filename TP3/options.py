@@ -28,8 +28,8 @@ class Options():
     def parser(self) -> None:
         self.p.parse_args(args=argv[1:], namespace=Options)
         
-        if self.e + self.r + self.b != 1:
-            raise Exception("Vous devez choisir une et une seule option parmi -e, -r et -b")
+        if self.e + self.r + self.b + self.c != 1:
+            raise Exception("Vous devez choisir une et une seule option parmi -e, -r, -b et -c")
         
         if self.e or self.r:
             if self.t is None or self.t < 1 or self.t % 2 != 1:
@@ -43,7 +43,13 @@ class Options():
                     raise Exception("S.V.P. fournir un chemin de fichier")
                 if not isfile(self.chemin):
                     raise Exception(f'"{self.chemin}" est un chemin invalide')
-        
+        if self.c:
+            if self.t is None or self.t < 1 or self.t % 2 != 1:
+                raise Exception("S.V.P. entrez une taille de fenêtre positive et impaire")
+            if self.n is None or self.t < 1:
+                raise Exception("S.V.P. entrez un nombre de maximal de mots a afficher par cluster")
+            if self.k is None or self.t < 1:
+                raise Exception("S.V.P. entrez le nombre de centroides, ce doit etre une valeur entiere")
 
 
 def main():

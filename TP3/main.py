@@ -6,6 +6,7 @@ from recherche import Recherche
 from options import Options
 from ui import demander
 from time import time
+from cluster import Cluster
 
 def main() -> int:
     try:
@@ -24,7 +25,14 @@ def main() -> int:
                     cerveau.charger_donnees()
                     demander(Recherche(cerveau), options.v)
                 elif options.c:
-                    pass
+                    cerveau.charger_donnees()
+                    clust = Cluster(options.n)
+                    # clust.matrice = cerveau.matrice
+                    clust.randomCentroid(cerveau.matrice, options.k)
+
+                    while True:
+                        clust.associationAuCentroid(cerveau.matrice)
+                        clust.ReassigneCentroid(cerveau.matrice)
 
     except Exception as e:
         print(f'\n{e}\n')
