@@ -13,6 +13,7 @@ class Cluster():
         self.resultat = []
         self.tour = 0
         self.start_time = 0
+        self.dictioMots = {}
 
     def randomCentroid(self, matrice, kCentroid: int):
         self.start_time = time.time()
@@ -39,56 +40,79 @@ class Cluster():
             # Assigner chaque coordonnée au centroid le plus proche
             resultats.append(centroid_index)
 
+
+
+
         #faire des set pour comparer notre resultat precendant
         if(self.resultat != []):
-            combined_list = zip(self.resultat, resultats)
-
-            # Utiliser la fonction filter() pour filtrer les éléments différents
-            diff_list = list(filter(lambda x: x[0] != x[1], combined_list))
-            end_time = time.time()
-            duration = end_time - self.start_time
-            self.start_time = time.time()
-            print("Itération " + str(self.tour) + " effectuée en " + str(duration) + " secondes (" + str(len(diff_list)) + " changements)")
-            self.tour += 1
-
+            self.calculDiffIteration(resultats)
 
         if (self.resultat == resultats):
-            print("stable")
+            self.affichageMotClusterFinal(resultats)
             return False
-        self.resultat = resultats
-        # print(self.resultat)
-        for i in range(len(self.listCentroid)):
-            count_ones = self.resultat.count(i)
-            print("Il y a " + str(count_ones) + " mots appartenant au centroïde " + str(i))
 
-        print("\n")
+        self.resultat = resultats
+
+        self.calculAppartenanceCentro()
+
         return True
 
 
-
-
-    def ReassigneCentroid(self, matrice):
+    def reassigneCentroid(self, matrice):
         for i in range(len(self.listCentroid)):
             indices = np.where(np.array(self.resultat) == i)[0]
             x_coords = matrice[indices, :]
             self.listCentroid[i] = np.sum(x_coords, axis=0) / x_coords.shape[0]
 
+    def affichageMotClusterFinal(self, resultats):
+        mes_cles = list(self.dictioMots.keys())
+
+        listes = [[] for _ in range(len(self.listCentroid))]
+        for i in range(len(resultats)):
+            listes[resultats[i]].append(mes_cles[i])
+
+        for i in range(len(self.listCentroid)):
+            print("Pour le cluster " + str(i))
+            for j in range(int(self.nbrMaxMot)):
+                print(listes[i][j])
+            print("\n")
+
+        print("stable")
+
+    def calculDiffIteration(self, resultats):
+        combined_list = zip(self.resultat, resultats)
+
+        # Utiliser la fonction filter() pour filtrer les éléments différents
+        diff_list = list(filter(lambda x: x[0] != x[1], combined_list))
+        end_time = time.time()
+        duration = end_time - self.start_time
+        self.start_time = time.time()
+        print("Itération " + str(self.tour) + " effectuée en " + str(duration) + " secondes (" + str(
+            len(diff_list)) + " changements)")
+        self.tour += 1
+
+    def calculAppartenanceCentro(self):
+        for i in range(len(self.listCentroid)):
+            count_ones = self.resultat.count(i)
+            print("Il y a " + str(count_ones) + " mots appartenant au centroïde " + str(i))
+        print("\n")
 
 # def main():
-#     matrix = np.random.randint(0, 100, size=(10000, 10000)).astype(float) / 1
-#     cluster = Cluster(6)
-#     cluster.randomCentroid(matrix, 2)
-#     # print(cluster.listCentroid)
+#      matrix = np.random.randint(0, 100, size=(1000, 1000)).astype(float) / 1
+#      cluster = Cluster(6)
+#      cluster.randomCentroid(matrix, 2)
+#      # print(cluster.listCentroid)
 #
-#     go = True
-#     while go:
-#         go = cluster.associationAuCentroid(matrix)
-#         cluster.ReassigneCentroid(matrix)
-
-
-
+#      go = True
+#      while go:
+#          go = cluster.associationAuCentroid(matrix)
+#          cluster.ReassigneCentroid(matrix)
+#
+#
+#
 # if __name__ == '__main__':
-    # quit(main())
+#     quit(main())
+
 
 
 
