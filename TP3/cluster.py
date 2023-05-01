@@ -1,6 +1,7 @@
 import numpy as np
 import time
 from scipy.spatial.distance import cdist
+import csv
 
 
 from numpy import float32
@@ -46,7 +47,7 @@ class Cluster():
         if self.resultat:
             self.calculDiffIteration(resultats)
         if self.resultat == resultats:
-            self.affichageMotClusterFinal(resultats)
+            self.affichageMotClusterFinal(resultats, distance)
             return False
 
         self.resultat = resultats
@@ -60,7 +61,7 @@ class Cluster():
             x_coords = matrice[indices, :]
             self.listCentroid[i] = np.sum(x_coords, axis=0) / x_coords.shape[0]
 
-    def affichageMotClusterFinal(self, resultats):
+    def affichageMotClusterFinal(self, resultats, distance):
         #A REVOIR, p-e probleme si le dictionnaire ne se transpose pas en ordre
         mes_cles = list(self.dictioMots.keys())
 
@@ -68,12 +69,40 @@ class Cluster():
         for i in range(len(resultats)):
             listes[resultats[i]].append(mes_cles[i])
 
-        for i in range(len(self.listCentroid)):
-            print("Pour le cluster " + str(i))
-            for j in range(int(self.nbrMaxMot)):
-                if len(listes[i]) - 1 >= j:
-                    print(listes[i][j])
-            print("\n")
+        listeDictio = [{} for _ in range(len(self.listCentroid))]
+        for i in range(len(resultats)):
+            listeDictio[resultats[i]][(mes_cles[i])] = (np.min(distance[self.dictioMots[(mes_cles[i])],:]))
+
+        print(listeDictio[1])
+
+        dico = {}
+        with open("Lexique382.csv", "r", encoding="utf-8") as f:
+
+            lines = f.read().splitlines()
+            for line in lines[1:]:
+                line = line.split('\t')
+                if line[0] in mes_cles:
+                    dico[line[0]] = line[3]
+
+            # print(dico)
+
+            liste_valeurs = list(set(dico.values()))
+            print(liste_valeurs)
+
+            for i in range(len(self.listCentroid)):
+                print("Pour le cluster " + str(i))
+                for j in range(int(self.nbrMaxMot)):
+                    if len(listes[i]) - 1 >= j:
+                        print("            " + listes[i][j] + " --> " + str(np.min(distance[self.dictioMots[listes[i][j]],:])))
+                        if listes[i][j] in dico:
+                            print(dico[listes[i][j]])
+
+                print("\n")
+
+
+        votes = {cGrams: 0 for cGrams in liste_valeurs}
+        # for i in range(len(self.listCentroid)):
+        #     for mot, dist in listeDictio:
 
         print("stable")
 
@@ -88,6 +117,8 @@ class Cluster():
         print("Itération " + str(self.tour) + " effectuée en " + str(duration) + " secondes (" + str(
             len(diff_list)) + " changements)")
         self.tour += 1
+
+
 
     def calculAppartenanceCentro(self):
         for i in range(len(self.listCentroid)):

@@ -24,6 +24,15 @@ class Options():
         self.p.add_argument('-n', type=str, help="Nombre Maximal de mots par Cluster")
         self.p.add_argument('-k', type=int, help="Nombre de Centroid")
 
+        self.p.add_argument('-knn', action="store_true", help="KNN")
+        # self.p.add_argument('-k', type=int, required=True)
+        self.p.add_argument('--features', type=str)
+        self.p.add_argument('--labels', type=str)
+        # self.p.add_argument('--enc', type=str, required=True)
+        self.p.add_argument('--weighting', type=int)
+        self.p.add_argument('--normalize', action="store_true")
+        self.p.add_argument('--id', type=int)
+
 
     def parser(self) -> None:
         self.p.parse_args(args=argv[1:], namespace=Options)

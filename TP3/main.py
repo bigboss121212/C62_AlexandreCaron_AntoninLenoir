@@ -7,6 +7,7 @@ from options import Options
 from ui import demander
 from time import time
 from cluster import Cluster
+from knn import KNN
 
 def main() -> int:
     try:
@@ -35,6 +36,8 @@ def main() -> int:
                     while go:
                         go = clust.associationAuCentroid(cerveau.matrice)
                         clust.reassigneCentroid(cerveau.matrice)
+                # elif option.knn:
+                #     knn = KNN(opts.k, opts.features, opts.labels, opts.enc, opts.normalize)
 
     except Exception as e:
         print(f'\n{e}\n')
