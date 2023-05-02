@@ -3,13 +3,19 @@ import time
 from scipy.spatial.distance import cdist
 import csv
 
-
 from numpy import float32
+
+def uniq(ordre, distance): return 1
+def harm(ordre, distance): return 1 / (ordre + 1)
+def dist(ordre, distance): return 1 / (distance ** 2 + 1)
+
+PONDERATION = [uniq, harm, dist]
 
 
 class Cluster():
-    def __init__(self, nbrMaxMot: int):
+    def __init__(self, nbrMaxMot: int, nbrKnn: int):
         self.nbrMaxMot = nbrMaxMot
+        self.nbrKnn = nbrKnn
         self.start_time = 0
         self.tour = 0
         self.matrice = None
@@ -65,44 +71,45 @@ class Cluster():
         #A REVOIR, p-e probleme si le dictionnaire ne se transpose pas en ordre
         mes_cles = list(self.dictioMots.keys())
 
-        listes = [[] for _ in range(len(self.listCentroid))]
-        for i in range(len(resultats)):
-            listes[resultats[i]].append(mes_cles[i])
-
+        #dictio mot/distance
         listeDictio = [{} for _ in range(len(self.listCentroid))]
         for i in range(len(resultats)):
-            listeDictio[resultats[i]][(mes_cles[i])] = (np.min(distance[self.dictioMots[(mes_cles[i])],:]))
+            listeDictio[resultats[i]][(mes_cles[i])] = float(np.min(distance[self.dictioMots[(mes_cles[i])],:]))
 
-        print(listeDictio[1])
+        #pour trier les dictios et les afficher
+        for index, dict in enumerate(listeDictio):
+            listeDictio[index] = sorted(dict.items(), key=lambda x: x[1])
+            print(f"Pour le cluster {index}")
+            for i, (cle, valeur) in enumerate(listeDictio[index][:self.nbrMaxMot]):
+                print(f"            {cle} --> {valeur}")
+            print("\n")
 
-        dico = {}
-        with open("Lexique382.csv", "r", encoding="utf-8") as f:
+        dico, liste_valeurs = self.extraireCsv(mes_cles)
 
-            lines = f.read().splitlines()
-            for line in lines[1:]:
-                line = line.split('\t')
-                if line[0] in mes_cles:
-                    dico[line[0]] = line[3]
+            # for i in range(len(self.listCentroid)):
+            #     print("Pour le cluster " + str(i))
+            #     for j in range(int(self.nbrMaxMot)):
+            #         if len(listes[i]) - 1 >= j:
+            #             print("            " + listes[i][j] + " --> " + str(np.min(distance[self.dictioMots[listes[i][j]],:])))
+            #             if listes[i][j] in dico:
+            #                 print(dico[listes[i][j]])
+            #
+            #     print("\n")
 
-            # print(dico)
+        #p-e choisir une autre ponderation
+        pond = PONDERATION[1]
 
-            liste_valeurs = list(set(dico.values()))
-            print(liste_valeurs)
-
-            for i in range(len(self.listCentroid)):
-                print("Pour le cluster " + str(i))
-                for j in range(int(self.nbrMaxMot)):
-                    if len(listes[i]) - 1 >= j:
-                        print("            " + listes[i][j] + " --> " + str(np.min(distance[self.dictioMots[listes[i][j]],:])))
-                        if listes[i][j] in dico:
-                            print(dico[listes[i][j]])
-
-                print("\n")
-
-
-        votes = {cGrams: 0 for cGrams in liste_valeurs}
-        # for i in range(len(self.listCentroid)):
-        #     for mot, dist in listeDictio:
+        #afficher le KNN pour chaque centroid
+        for i in range(len(self.listCentroid)):
+            print(f"Pour le cluster {i}")
+            votes = {cGrams: 0 for cGrams in liste_valeurs}
+            for ordre, (mot, dist) in enumerate(listeDictio[i][:self.nbrKnn]):
+                if mot in dico:
+                    votes[dico[mot]] += pond(ordre, dist)
+            votes = sorted(votes.items(), key=lambda t: t[1], reverse=True)
+            for nom, vote in votes:
+                print(f'{nom} : {vote}')
+            print("\n")
 
         print("stable")
 
@@ -118,13 +125,25 @@ class Cluster():
             len(diff_list)) + " changements)")
         self.tour += 1
 
-
-
     def calculAppartenanceCentro(self):
         for i in range(len(self.listCentroid)):
             count_ones = self.resultat.count(i)
             print("Il y a " + str(count_ones) + " mots appartenant au centroïde " + str(i))
         print("\n")
+
+    def extraireCsv(self, mes_cles):
+        dico = {}
+        with open("Lexique382.csv", "r", encoding="utf-8") as f:
+
+            lines = f.read().splitlines()
+            for line in lines[1:]:
+                line = line.split('\t')
+                if line[0] in mes_cles:
+                    dico[line[0]] = line[3]
+
+            liste_valeurs = list(set(dico.values()))
+
+            return dico, liste_valeurs
 
 # def main():
 #      matrix = np.random.randint(0, 100, size=(1000, 1000)).astype(float) / 1

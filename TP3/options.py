@@ -21,18 +21,9 @@ class Options():
         self.p.add_argument('-v', action="store_true", help="Performance times")
 
         self.p.add_argument('-c', action="store_true", help="Clustering")
-        self.p.add_argument('-n', type=str, help="Nombre Maximal de mots par Cluster")
+        self.p.add_argument('-n', type=int, help="Nombre Maximal de mots par Cluster")
         self.p.add_argument('-k', type=int, help="Nombre de Centroid")
-
-        self.p.add_argument('-knn', action="store_true", help="KNN")
-        # self.p.add_argument('-k', type=int, required=True)
-        self.p.add_argument('--features', type=str)
-        self.p.add_argument('--labels', type=str)
-        # self.p.add_argument('--enc', type=str, required=True)
-        self.p.add_argument('--weighting', type=int)
-        self.p.add_argument('--normalize', action="store_true")
-        self.p.add_argument('--id', type=int)
-
+        self.p.add_argument('-knn', type=int, help="Nombre de resultat pour le KNN")
 
     def parser(self) -> None:
         self.p.parse_args(args=argv[1:], namespace=Options)
@@ -55,10 +46,12 @@ class Options():
         if self.c:
             if self.t is None or self.t < 1 or self.t % 2 != 1:
                 raise Exception("S.V.P. entrez une taille de fenêtre positive et impaire")
-            if self.n is None or self.t < 1:
+            if self.n is None or self.n < 1:
                 raise Exception("S.V.P. entrez un nombre de maximal de mots a afficher par cluster")
-            if self.k is None or self.t < 1:
+            if self.k is None or self.k < 1:
                 raise Exception("S.V.P. entrez le nombre de centroides, ce doit etre une valeur entiere")
+            if self.knn is None or self.knn < 1:
+                raise Exception("S.V.P. entrez le nombre de resultat pour le KNN, ce doit etre une valeur entiere")
 
 
 def main():

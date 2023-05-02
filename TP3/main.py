@@ -1,4 +1,3 @@
-from sys import argv
 from traceback import print_exc
 from dao import DAO
 from entrainementBD import EntrainementBD
@@ -7,7 +6,7 @@ from options import Options
 from ui import demander
 from time import time
 from cluster import Cluster
-from knn import KNN
+
 
 def main() -> int:
     try:
@@ -27,7 +26,7 @@ def main() -> int:
                     demander(Recherche(cerveau), options.v)
                 elif options.c:
                     cerveau.charger_donnees()
-                    clust = Cluster(options.n)
+                    clust = Cluster(options.n, options.knn)
                     clust.dictioMots = cerveau.vocabulaire
                     # clust.matrice = cerveau.matrice
                     clust.randomCentroid(cerveau.matrice, options.k)
@@ -36,8 +35,6 @@ def main() -> int:
                     while go:
                         go = clust.associationAuCentroid(cerveau.matrice)
                         clust.reassigneCentroid(cerveau.matrice)
-                # elif option.knn:
-                #     knn = KNN(opts.k, opts.features, opts.labels, opts.enc, opts.normalize)
 
     except Exception as e:
         print(f'\n{e}\n')
