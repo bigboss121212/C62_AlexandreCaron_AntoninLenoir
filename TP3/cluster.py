@@ -76,41 +76,35 @@ class Cluster():
         for i in range(len(resultats)):
             listeDictio[resultats[i]][(mes_cles[i])] = float(np.min(distance[self.dictioMots[(mes_cles[i])],:]))
 
-        #pour trier les dictios et les afficher
-        for index, dict in enumerate(listeDictio):
-            listeDictio[index] = sorted(dict.items(), key=lambda x: x[1])
-            print(f"Pour le cluster {index}")
-            for i, (cle, valeur) in enumerate(listeDictio[index][:self.nbrMaxMot]):
-                print(f"            {cle} --> {valeur}")
-            print("\n")
-
         dico, liste_valeurs = self.extraireCsv(mes_cles)
-
-            # for i in range(len(self.listCentroid)):
-            #     print("Pour le cluster " + str(i))
-            #     for j in range(int(self.nbrMaxMot)):
-            #         if len(listes[i]) - 1 >= j:
-            #             print("            " + listes[i][j] + " --> " + str(np.min(distance[self.dictioMots[listes[i][j]],:])))
-            #             if listes[i][j] in dico:
-            #                 print(dico[listes[i][j]])
-            #
-            #     print("\n")
+        #ajouter la categorie UNK
+        liste_valeurs.append("UNK")
 
         #p-e choisir une autre ponderation
-        pond = PONDERATION[1]
+        pond = PONDERATION[2]
+
+        #pour trier les dictios
+        for index, dict in enumerate(listeDictio):
+            listeDictio[index] = sorted(dict.items(), key=lambda x: x[1])
+
 
         #afficher le KNN pour chaque centroid
         for i in range(len(self.listCentroid)):
-            print(f"Pour le cluster {i}")
             votes = {cGrams: 0 for cGrams in liste_valeurs}
             for ordre, (mot, dist) in enumerate(listeDictio[i][:self.nbrKnn]):
                 if mot in dico:
                     votes[dico[mot]] += pond(ordre, dist)
+                else:
+                    votes["UNK"] += pond(ordre, dist)
             votes = sorted(votes.items(), key=lambda t: t[1], reverse=True)
-            for nom, vote in votes:
-                print(f'{nom} : {vote}')
+            for nom, vote in votes[:1]:
+                print(f'Centroide {i} -> cgram {nom} ({vote} votes)')
+            for i, (cle, valeur) in enumerate(listeDictio[i][:self.nbrMaxMot]):
+                if cle in dico:
+                    print(f"       {cle} ({dico[cle]}) --> {valeur}")
+                else:
+                    print(f"       {cle} (UNK) --> {valeur}")
             print("\n")
-
         print("stable")
 
     def calculDiffIteration(self, resultats):
@@ -145,33 +139,6 @@ class Cluster():
 
             return dico, liste_valeurs
 
-# def main():
-#      matrix = np.random.randint(0, 100, size=(1000, 1000)).astype(float) / 1
-#
-#      matrix = np.array([[3.14, 1.23, 4.56, 7.89, 2.71, 0.12, 9.87, 6.54, 5.43, 8.76],
-#                          [4.32, 0.98, 2.34, 5.67, 8.90, 1.23, 4.56, 7.89, 3.14, 2.71],
-#                          [0.12, 9.87, 6.54, 5.43, 8.76, 4.32, 0.98, 2.34, 5.67, 8.90],
-#                          [1.23, 4.56, 7.89, 3.14, 2.71, 0.12, 9.87, 6.54, 5.43, 8.76],
-#                          [4.32, 0.98, 2.34, 5.67, 8.90, 1.23, 4.56, 7.89, 3.14, 2.71],
-#                          [2.34, 5.67, 8.90, 1.23, 4.56, 7.89, 3.14, 2.71, 0.12, 9.87],
-#                          [6.54, 5.43, 8.76, 4.32, 0.98, 2.34, 5.67, 8.90, 1.23, 4.56],
-#                          [7.89, 3.14, 2.71, 0.12, 9.87, 6.54, 5.43, 8.76, 4.32, 0.98],
-#                          [5.67, 8.90, 1.23, 4.56, 7.89, 3.14, 2.71, 0.12, 9.87, 6.54],
-#                          [5.43, 8.76, 4.32, 0.98, 2.34, 5.67, 8.90, 1.23, 4.56, 7.89]])
-#
-#      cluster = Cluster(6)
-#      cluster.randomCentroid(matrix, 2)
-#      # print(cluster.listCentroid)
-#
-#      go = True
-#      while go:
-#          go = cluster.associationAuCentroid(matrix)
-#          cluster.reassigneCentroid(matrix)
-#
-#
-#
-# if __name__ == '__main__':
-#     quit(main())
 
 
 
