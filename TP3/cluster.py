@@ -3,8 +3,6 @@ import time
 from scipy.spatial.distance import cdist
 import csv
 
-from numpy import float32
-
 def uniq(ordre, distance): return 1
 def harm(ordre, distance): return 1 / (ordre + 1)
 def dist(ordre, distance): return 1 / (distance ** 2 + 1)
@@ -138,6 +136,12 @@ class Cluster():
             liste_valeurs = list(set(dico.values()))
 
             return dico, liste_valeurs
+
+    def boucleAssociation(self, matrice):
+        go = True
+        while go:
+            go = self.associationAuCentroid(matrice)
+            self.reassigneCentroid(matrice)
 
 
 

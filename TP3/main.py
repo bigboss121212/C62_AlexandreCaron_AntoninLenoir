@@ -28,13 +28,13 @@ def main() -> int:
                     cerveau.charger_donnees()
                     clust = Cluster(options.n, options.knn)
                     clust.dictioMots = cerveau.vocabulaire
-                    # clust.matrice = cerveau.matrice
                     clust.randomCentroid(cerveau.matrice, options.k)
+                    clust.boucleAssociation(cerveau.matrice)
 
-                    go = True
-                    while go:
-                        go = clust.associationAuCentroid(cerveau.matrice)
-                        clust.reassigneCentroid(cerveau.matrice)
+                    # go = True
+                    # while go:
+                    #     go = clust.associationAuCentroid(cerveau.matrice)
+                    #     clust.reassigneCentroid(cerveau.matrice)
 
     except Exception as e:
         print(f'\n{e}\n')
